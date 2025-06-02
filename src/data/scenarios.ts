@@ -23,6 +23,13 @@ export const scenarios: Scenario[] = [
         "Apex Capital",
         "Shareholders",
         "Employees"
+      ],
+      legalDomain: "Corporate Law",
+      constraints: [
+        "Time pressure - tender offer expires in 48 hours",
+        "Limited financial resources",
+        "Complex regulatory requirements",
+        "Shareholder approval needed"
       ]
     },
     defensiveStrategies: {
@@ -59,6 +66,9 @@ export const scenarios: Scenario[] = [
         risk: "HIGH",
         reward: "Total takeover defense"
       }
+    },
+    logicRound: {
+      prompt: "Present your initial defensive strategy against Apex Capital's hostile takeover attempt. Consider shareholder interests, corporate governance, and long-term value preservation."
     }
   },
   {
@@ -81,6 +91,13 @@ export const scenarios: Scenario[] = [
         "Former engineer",
         "Competitor company",
         "Current employees"
+      ],
+      legalDomain: "Intellectual Property Law",
+      constraints: [
+        "Limited time to gather evidence",
+        "Technical complexity of the code",
+        "Jurisdictional issues",
+        "Potential reputational damage"
       ]
     },
     defensiveStrategies: {
@@ -117,6 +134,9 @@ export const scenarios: Scenario[] = [
         risk: "HIGH",
         reward: "Total industry knockout"
       }
+    },
+    logicRound: {
+      prompt: "Outline your strategy to protect OmniWare's trade secrets and prevent further damage. Consider immediate legal actions, evidence gathering, and long-term protective measures."
     }
   },
   {
@@ -139,6 +159,13 @@ export const scenarios: Scenario[] = [
         "Horizon shareholders",
         "Healthcare providers",
         "Patients"
+      ],
+      legalDomain: "Antitrust Law",
+      constraints: [
+        "Strict regulatory deadlines",
+        "Complex market analysis required",
+        "Multiple stakeholder interests",
+        "Public health considerations"
       ]
     },
     defensiveStrategies: {
@@ -175,6 +202,9 @@ export const scenarios: Scenario[] = [
         risk: "HIGH",
         reward: "Keep everything"
       }
+    },
+    logicRound: {
+      prompt: "Detail your approach to defending the merger against FTC scrutiny. Consider regulatory compliance, market analysis, and potential remedies that preserve deal value."
     }
   }
 ];
