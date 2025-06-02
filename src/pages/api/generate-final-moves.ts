@@ -42,7 +42,7 @@ Player's Stats:
 - Risk: ${playerStats.risk}/10
 
 Game State:
-1. Player's Initial Defensive Strategy: ${scenario.riskRound.options[selectedStrategy].description}
+1. Player's Initial Defensive Strategy: ${scenario.defensiveStrategies[selectedStrategy].description.join(', ')}
 2. Opponent's Aggressive Move (${opponent.name}): ${opponentCounter}
 
 Generate two defensive options:
