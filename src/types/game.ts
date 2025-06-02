@@ -40,11 +40,16 @@ export interface Scenario {
   context: {
     keyIssues: string[];
     stakeholders: string[];
+    legalDomain: string;
+    constraints: string[];
   };
   defensiveStrategies: {
     low: DefensiveStrategy;
     medium: DefensiveStrategy;
     high: DefensiveStrategy;
+  };
+  logicRound: {
+    prompt: string;
   };
 }
 

@@ -1,4 +1,4 @@
-import { RoundOptions, Scenario } from '@/data/scenarios';
+import { RoundOptions, Scenario } from '@/types/game';
 
 export async function generateOptions(scenario: Scenario): Promise<RoundOptions> {
   try {

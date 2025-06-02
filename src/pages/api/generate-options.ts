@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import OpenAI from 'openai';
-import { RoundOptions, Scenario } from '@/data/scenarios';
+import { RoundOptions, Scenario } from '@/types/game';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,

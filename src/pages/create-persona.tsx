@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { PlayerData, PlayerStats } from "@/types/player";
 import { scenarios } from "@/data/scenarios";
 import { characters } from "@/data/characters";
+import { Card } from '@/components/ui/card';
 
 const MAX_POINTS = 24;
 const MIN_STAT = 1;
