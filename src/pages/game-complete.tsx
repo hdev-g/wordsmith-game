@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Card } from '@/components/ui/card';
 import { scenarios } from '@/data/scenarios';
-import { Scenario } from '@/types/game';
+import { Character, Scenario } from '@/types/game';
 import { PlayerData } from '@/types/player';
-import { Character } from '@/data/characters';
 
 interface GameResult {
   argument: string;

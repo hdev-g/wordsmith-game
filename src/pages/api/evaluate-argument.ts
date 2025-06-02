@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import OpenAI from 'openai';
-import { Character } from '@/data/characters';
-import { Scenario } from '@/data/scenarios';
+import { Character, Scenario } from '@/types/game';
 import { PlayerStats } from '@/types/player';
 
 const openai = new OpenAI({

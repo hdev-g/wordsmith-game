@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Card } from '@/components/ui/card';
 import { PlayerData } from '@/types/player';
-import { Scenario } from '@/data/scenarios';
-import { Character } from '@/data/characters';
+import { Character, Scenario } from '@/types/game';
 
 interface GameState {
   stage: 'intro' | 'player-turn' | 'evaluation' | 'game-over';

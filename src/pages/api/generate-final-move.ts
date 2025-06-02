@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import OpenAI from 'openai';
-import { Character } from '@/data/characters';
-import { Scenario } from '@/types/game';
+import { Character, Scenario } from '@/types/game';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
