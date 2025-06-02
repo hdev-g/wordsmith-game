@@ -1,0 +1,172 @@
+/* src/styles/globals.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Chakra+Petch:wght@300;400;500;600;700&display=swap');
+@import './arcade-theme.css';
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 0, 0, 0;
+  --background-end-rgb: 0, 20, 40;
+}
+
+@layer base {
+  body {
+    color: rgb(var(--foreground-rgb));
+    background: linear-gradient(
+      to bottom,
+      rgb(var(--background-start-rgb)),
+      rgb(var(--background-end-rgb))
+    );
+    font-family: 'Chakra Petch', sans-serif;
+    letter-spacing: 0.02em;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6, .display-font {
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.05em;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  ::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+  }
+}
+
+@layer components {
+  /* Base styles for all pages */
+  .page-container {
+    @apply min-h-screen relative overflow-hidden;
+  }
+
+  /* Main content area */
+  .main-content {
+    @apply relative min-h-screen;
+    background: 
+      linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,20,40,0.7)),
+      repeating-linear-gradient(
+        0deg,
+        rgba(0, 255, 255, 0.05) 0px,
+        rgba(0, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 50px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgba(0, 255, 255, 0.05) 0px,
+        rgba(0, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 50px
+      );
+    background-size: 100% 100%, 50px 50px, 50px 50px;
+    animation: gridLines 15s linear infinite;
+  }
+
+  /* Add scanlines to all pages */
+  .page-overlay {
+    @apply absolute inset-0 pointer-events-none;
+    &::before {
+      content: '';
+      @apply absolute inset-0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.1),
+        rgba(0, 0, 0, 0.1) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+      animation: scanline 8s linear infinite;
+      pointer-events: none;
+    }
+  }
+
+  /* Consistent card styling */
+  .game-card {
+    @apply relative p-6 bg-black/80 backdrop-blur-sm border;
+    border-color: var(--primary-glow);
+    box-shadow: 0 0 10px var(--primary-glow);
+  }
+
+  /* Button styling */
+  .game-button {
+    @apply relative px-8 py-4 font-bold tracking-wider uppercase transition-all duration-300;
+    background: rgba(0, 255, 255, 0.1);
+    border: 1px solid var(--primary-glow);
+    color: var(--primary-glow);
+    text-shadow: 0 0 5px var(--primary-glow);
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.1em;
+
+    &:hover:not(:disabled) {
+      background: rgba(0, 255, 255, 0.2);
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    &:disabled {
+      @apply opacity-50 cursor-not-allowed;
+    }
+  }
+
+  /* Heading styles */
+  .game-title {
+    @apply text-6xl mb-6 font-bold uppercase;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.15em;
+    color: var(--primary-glow);
+    text-shadow: 0 0 10px var(--primary-glow);
+  }
+
+  .game-subtitle {
+    @apply text-2xl mb-4 uppercase;
+    font-family: 'Chakra Petch', sans-serif;
+    letter-spacing: 0.1em;
+    color: var(--primary-glow);
+    text-shadow: 0 0 5px var(--primary-glow);
+  }
+
+  /* Form styles */
+  .form-input {
+    @apply w-full px-4 py-3 bg-black/30 rounded;
+    font-family: 'Chakra Petch', sans-serif;
+    letter-spacing: 0.05em;
+  }
+
+  .form-label {
+    @apply block text-lg font-medium mb-2;
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.05em;
+  }
+
+  /* Loading states */
+  .loading-container {
+    @apply flex items-center justify-center min-h-screen;
+  }
+
+  .loading-content {
+    @apply text-center space-y-6;
+  }
+
+  /* Error states */
+  .error-container {
+    @apply flex items-center justify-center min-h-screen;
+  }
+
+  .error-content {
+    @apply text-center space-y-4 p-8;
+    --primary-glow: var(--danger-glow);
+  }
+}
+
+.courtroom-bg {
+  min-height: 100vh;
+  background-image: url('/images/courtroom-bg.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
