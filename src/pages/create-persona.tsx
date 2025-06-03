@@ -163,7 +163,7 @@ export default function CreatePersonaPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId: userData?.id || '',
+          userId: (userData as { id?: string })?.id || '',
           stats
         }),
       });
