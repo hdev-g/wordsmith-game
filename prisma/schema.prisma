@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL") // Uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // Uses a direct connection
+}
+
+model User {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  email       String   @unique
+  name        String?
+  companyName String?
+  role        String?  // Legal role/position in the company
+  scores      Score[]
+}
+
+model Score {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now()) // When the game was played
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  scenarioId Int      // Reference to the scenario that was played
+  score      Int      // Final score achieved
+  outcome    String   // "successful defense" or "failed defense"
+
+  @@index([userId])
+  @@index([createdAt]) // For efficient time-based queries
+} 
