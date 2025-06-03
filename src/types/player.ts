@@ -5,7 +5,10 @@ export interface PlayerStats {
 }
 
 export interface PlayerData {
+  id?: string;
   name: string;
-  motto: string;
-  stats: PlayerStats;
+  email: string;
+  companyName: string;
+  role: string;
+  stats?: PlayerStats;
 } 

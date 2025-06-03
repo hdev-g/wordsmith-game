@@ -250,15 +250,14 @@ export default function FinalMovePage() {
       setCalculatingOutcome(true);
       
       // Get userId from userData
-      const userId = userData?.id;
-      if (!userId) {
+      if (!userData?.id) {
         throw new Error('User ID not found');
       }
       
       // Prepare the data for case outcome calculation
       const caseData = {
-        playerStats: userData?.stats,
-        playerName: userData?.name,
+        playerStats: userData.stats,
+        playerName: userData.name,
         scenario,
         selectedStrategy: playerMove?.name.toLowerCase().includes('low') ? 'low' :
                         playerMove?.name.toLowerCase().includes('medium') ? 'medium' : 'high',
@@ -266,7 +265,7 @@ export default function FinalMovePage() {
         opponentCounter: opponentMove?.counter,
         finalMove: move,
         powerUpPoints,
-        userId, // Add userId to caseData
+        userId: userData.id,
         scenarioId: scenario?.id || 1
       };
       
@@ -292,7 +291,7 @@ export default function FinalMovePage() {
       // Store both the case data and outcome for the result page
       localStorage.setItem('caseData', JSON.stringify(caseData));
       localStorage.setItem('caseOutcome', JSON.stringify(outcome));
-      localStorage.setItem('userId', userId); // Store userId separately
+      localStorage.setItem('userId', userData.id); // Store userId separately
 
       // Navigate to the result page
       router.push('/case-result');

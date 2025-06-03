@@ -1,47 +1,38 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL") // Uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // Uses a direct connection
+  url      = env("DEV_DATABASE_URL")
 }
 
 model User {
-  id          String   @id @default(cuid())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  email       String   @unique
-  name        String?
-  companyName String?
-  role        String?  // Legal role/position in the company
-  
-  // Player stats
-  logicScore    Int     @default(5)  // Base logic score out of 10
-  charismaScore Int     @default(5)  // Base charisma score out of 10
-  riskScore     Int     @default(5)  // Base risk tolerance score out of 10
-  
-  scores      Score[]
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  email         String   @unique
+  name          String?
+  companyName   String?
+  role          String?
+  logicScore    Int      @default(5)
+  charismaScore Int      @default(5)
+  riskScore     Int      @default(5)
+  scores        Score[]
 }
 
 model Score {
-  id         String   @id @default(cuid())
-  createdAt  DateTime @default(now()) // When the game was played
-  userId     String
-  user       User     @relation(fields: [userId], references: [id])
-  scenarioId Int      // Reference to the scenario that was played
-  score      Int      // Final score achieved
-  outcome    String   // "successful defense" or "failed defense"
-
-  // Stats at the time of the game
-  logicScore    Int  // Logic score when game was played
-  charismaScore Int  // Charisma score when game was played
-  riskScore     Int  // Risk score when game was played
+  id            String   @id @default(cuid())
+  createdAt     DateTime @default(now())
+  userId        String
+  scenarioId    Int
+  score         Int
+  outcome       String
+  logicScore    Int
+  charismaScore Int
+  riskScore     Int
+  user          User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
-  @@index([createdAt]) // For efficient time-based queries
-} 
+  @@index([createdAt])
+}

@@ -1,9 +1,9 @@
 // src/data/scenarios.ts
 
 import { Scenario } from '@/types/game';
-
-export const scenarios: Scenario[] = [
-  {
+  
+  export const scenarios: Scenario[] = [
+    {
     id: 1,
     title: "Boardroom Blitz",
     description: "A high-stakes battle for corporate control as Apex Capital launches an aggressive hostile takeover bid for TitanTech.",
@@ -207,4 +207,4 @@ export const scenarios: Scenario[] = [
       prompt: "Detail your approach to defending the merger against FTC scrutiny. Consider regulatory compliance, market analysis, and potential remedies that preserve deal value."
     }
   }
-];
+  ];
