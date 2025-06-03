@@ -163,14 +163,14 @@ export default function CreatePersonaPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          userId: userData.id ?? '',
+          userId: userData?.id || '',
           stats
         }),
       });
 
       const data = await response.json();
       
-      if (!data.success || !userData.id) {
+      if (!data.success) {
         setError(data.message || 'Failed to update stats');
         return;
       }
