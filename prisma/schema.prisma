@@ -19,6 +19,12 @@ model User {
   name        String?
   companyName String?
   role        String?  // Legal role/position in the company
+  
+  // Player stats
+  logicScore    Int     @default(5)  // Base logic score out of 10
+  charismaScore Int     @default(5)  // Base charisma score out of 10
+  riskScore     Int     @default(5)  // Base risk tolerance score out of 10
+  
   scores      Score[]
 }
 
@@ -30,6 +36,11 @@ model Score {
   scenarioId Int      // Reference to the scenario that was played
   score      Int      // Final score achieved
   outcome    String   // "successful defense" or "failed defense"
+
+  // Stats at the time of the game
+  logicScore    Int  // Logic score when game was played
+  charismaScore Int  // Charisma score when game was played
+  riskScore     Int  // Risk score when game was played
 
   @@index([userId])
   @@index([createdAt]) // For efficient time-based queries
