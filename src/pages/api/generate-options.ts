@@ -2,8 +2,14 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import OpenAI from 'openai';
 import { RoundOptions, Scenario } from '@/types/game';
 
+// Add debug logging for environment variable
+console.log('API Key exists:', !!process.env.OPENAI_API_KEY);
+console.log('API Key prefix:', process.env.OPENAI_API_KEY?.substring(0, 7));
+
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
+  // Add organization if you have one
+  // organization: process.env.OPENAI_ORG_ID,
 });
 
 // Cache object to store generated options
@@ -33,6 +39,12 @@ export default async function handler(
     if (cachedData && (now - cachedData.timestamp) < CACHE_DURATION) {
       console.log('Using cached options for scenario:', scenario.id);
       return res.status(200).json(cachedData.options);
+    }
+
+    // Verify API key before making request
+    if (!process.env.OPENAI_API_KEY) {
+      console.error('OpenAI API key is missing');
+      return res.status(500).json({ error: 'OpenAI API key is not configured' });
     }
 
     const prompt = `
@@ -69,28 +81,42 @@ Format as JSON with the following structure:
 }`;
 
     console.log('Generating new options for scenario:', scenario.id);
-    const completion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: prompt }],
-      model: "gpt-4-turbo-preview",
-      temperature: 0.7,
-      max_tokens: 1000,
-      response_format: { type: "json_object" },
-    });
+    try {
+      const completion = await openai.chat.completions.create({
+        messages: [{ role: "user", content: prompt }],
+        model: "gpt-4-turbo-preview",
+        temperature: 0.7,
+        max_tokens: 1000,
+        response_format: { type: "json_object" },
+      });
 
-    const response = completion.choices[0].message.content;
-    if (!response) {
-      throw new Error('No response from OpenAI');
+      const response = completion.choices[0].message.content;
+      if (!response) {
+        throw new Error('No response from OpenAI');
+      }
+
+      const options = JSON.parse(response) as RoundOptions;
+      
+      // Cache the new options
+      optionsCache[scenario.id] = {
+        options,
+        timestamp: now
+      };
+
+      return res.status(200).json(options);
+    } catch (openaiError: any) {
+      console.error('OpenAI API Error:', {
+        error: openaiError,
+        message: openaiError.message,
+        type: openaiError.type,
+        status: openaiError.status,
+      });
+      return res.status(500).json({ 
+        error: 'OpenAI API error',
+        details: openaiError.message,
+        type: openaiError.type
+      });
     }
-
-    const options = JSON.parse(response) as RoundOptions;
-    
-    // Cache the new options
-    optionsCache[scenario.id] = {
-      options,
-      timestamp: now
-    };
-
-    return res.status(200).json(options);
   } catch (error) {
     console.error('Error generating options:', error);
     return res.status(500).json({ error: 'Failed to generate options' });
