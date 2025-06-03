@@ -249,6 +249,12 @@ export default function FinalMovePage() {
       setLoading(true);
       setCalculatingOutcome(true);
       
+      // Get userId from userData
+      const userId = userData?.id;
+      if (!userId) {
+        throw new Error('User ID not found');
+      }
+      
       // Prepare the data for case outcome calculation
       const caseData = {
         playerStats: userData?.stats,
@@ -259,7 +265,9 @@ export default function FinalMovePage() {
         opponent,
         opponentCounter: opponentMove?.counter,
         finalMove: move,
-        powerUpPoints
+        powerUpPoints,
+        userId, // Add userId to caseData
+        scenarioId: scenario?.id || 1
       };
       
       console.log('Calculating case outcome with data:', caseData);
@@ -284,6 +292,7 @@ export default function FinalMovePage() {
       // Store both the case data and outcome for the result page
       localStorage.setItem('caseData', JSON.stringify(caseData));
       localStorage.setItem('caseOutcome', JSON.stringify(outcome));
+      localStorage.setItem('userId', userId); // Store userId separately
 
       // Navigate to the result page
       router.push('/case-result');
@@ -354,28 +363,28 @@ export default function FinalMovePage() {
         <div className="absolute inset-0 courtroom-bg opacity-50" />
         <div className="absolute inset-0 bg-black/50 tron-grid" />
 
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6">
+        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
           <div className="w-full max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h1 className="text-5xl font-bold uppercase tracking-wider mb-4 text-cyan-100"
+            <div className="text-center mb-6">
+              <h1 className="text-4xl font-bold uppercase tracking-wider mb-2 text-cyan-100"
                   style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}>
                 Final Move
               </h1>
-              <p className="text-xl text-cyan-300/80 mb-8">Select your finishing strategy</p>
+              <p className="text-lg text-cyan-300/80 mb-4">Select your finishing strategy</p>
 
-              <div className="grid grid-cols-2 gap-8 mb-12">
+              <div className="grid grid-cols-2 gap-4 mb-6">
                 {finalMoves.map((move, index) => (
                   <button
                     key={index}
                     onClick={() => handleMoveSelect(move)}
-                    className={`text-left p-6 rounded-xl backdrop-blur-sm transition-all duration-300
+                    className={`text-left p-4 rounded-xl backdrop-blur-sm transition-all duration-300
                       ${selectedMove === move 
                         ? 'bg-cyan-900/30 border-2 border-cyan-400 shadow-[0_0_30px_rgba(0,255,255,0.3)]' 
                         : 'bg-black/80 border-2 border-cyan-500/50 hover:bg-cyan-900/20 hover:scale-[1.02] hover:-translate-y-1'
                       } group`}
                   >
-                    <div className="mb-6">
-                      <h3 className="text-3xl font-bold text-cyan-100 uppercase tracking-wider mb-2"
+                    <div className="mb-3">
+                      <h3 className="text-2xl font-bold text-cyan-100 uppercase tracking-wider mb-1"
                           style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}>
                         {move.title}
                       </h3>
@@ -384,20 +393,20 @@ export default function FinalMovePage() {
                       </p>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-2">
                       {move.pros.slice(0, 1).map((pro, i) => (
-                        <div key={i} className="bg-cyan-900/20 p-3 rounded-lg border border-cyan-500/30">
+                        <div key={i} className="bg-cyan-900/20 p-2 rounded-lg border border-cyan-500/30">
                           <div className="flex items-start">
-                            <span className="text-cyan-400 mr-2 text-lg font-bold">+</span>
-                            <span className="text-cyan-100/90">{pro}</span>
+                            <span className="text-cyan-400 mr-2 text-base font-bold">+</span>
+                            <span className="text-cyan-100/90 text-sm">{pro}</span>
                           </div>
                         </div>
                       ))}
                       {move.cons.slice(0, 1).map((con, i) => (
-                        <div key={i} className="bg-cyan-900/20 p-3 rounded-lg border border-cyan-500/30">
+                        <div key={i} className="bg-cyan-900/20 p-2 rounded-lg border border-cyan-500/30">
                           <div className="flex items-start">
-                            <span className="text-cyan-400 mr-2 text-lg font-bold">-</span>
-                            <span className="text-cyan-100/90">{con}</span>
+                            <span className="text-cyan-400 mr-2 text-base font-bold">-</span>
+                            <span className="text-cyan-100/90 text-sm">{con}</span>
                           </div>
                         </div>
                       ))}
@@ -407,32 +416,21 @@ export default function FinalMovePage() {
               </div>
 
               {/* Power Up Section */}
-              <div className={`mt-8 flex flex-col items-center transition-opacity duration-300
+              <div className={`mt-4 flex flex-col items-center transition-opacity duration-300
                 ${selectedMove ? 'opacity-100' : 'opacity-50 pointer-events-none'}`}>
                 <div 
-                  className={`relative w-32 h-32 mb-4 cursor-pointer transition-all duration-200 
+                  className={`relative w-24 h-24 mb-2 cursor-pointer transition-all duration-200 
                     ${selectedMove && !hasShaken ? 'animate-[shake_0.5s_ease-in-out]' : ''}
                     ${selectedMove ? 'hover:scale-105' : ''}`}
-                  onMouseDown={(e) => {
-                    console.log('Mouse down event triggered');
-                    startPowerUp();
-                  }}
-                  onMouseUp={(e) => {
-                    console.log('Mouse up event triggered');
-                    stopPowerUp();
-                  }}
-                  onMouseLeave={(e) => {
-                    console.log('Mouse leave event triggered');
-                    stopPowerUp();
-                  }}
+                  onMouseDown={startPowerUp}
+                  onMouseUp={stopPowerUp}
+                  onMouseLeave={stopPowerUp}
                   onTouchStart={(e) => {
-                    console.log('Touch start event triggered');
-                    e.preventDefault(); // Prevent default touch behavior
+                    e.preventDefault();
                     startPowerUp();
                   }}
                   onTouchEnd={(e) => {
-                    console.log('Touch end event triggered');
-                    e.preventDefault(); // Prevent default touch behavior
+                    e.preventDefault();
                     stopPowerUp();
                   }}
                 >
@@ -456,17 +454,17 @@ export default function FinalMovePage() {
                   )}
                 </div>
                 
-                <div className={`text-cyan-300/80 uppercase tracking-wider text-sm mb-2 transition-all duration-300 ${
+                <div className={`text-cyan-300/80 uppercase tracking-wider text-xs mb-1 transition-all duration-300 ${
                   selectedMove ? 'animate-[readyGlow_2s_ease-in-out_infinite]' : ''
                 }`}>
                   Hold to Deploy Wordsmith
                 </div>
 
-                <div className="text-cyan-400 font-bold mb-4">
+                <div className="text-cyan-400 font-bold text-sm mb-2">
                   Power-Up Points: {powerUpPoints}/{MAX_POWER_UP_POINTS}
                 </div>
 
-                <div className="w-64 h-2 bg-cyan-900/40 rounded-full overflow-hidden">
+                <div className="w-48 h-2 bg-cyan-900/40 rounded-full overflow-hidden">
                   <div 
                     className="h-full bg-cyan-400 transition-all duration-100 ease-linear rounded-full"
                     style={{ 

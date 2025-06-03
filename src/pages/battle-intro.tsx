@@ -206,24 +206,24 @@ export default function BattleIntroPage() {
         <div className="absolute inset-0 courtroom-bg opacity-50" />
         <div className="absolute inset-0 bg-black/50 tron-grid" />
 
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6">
+        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
           <div className="w-full max-w-4xl mx-auto">
-            <div className="text-center mb-12">
+            <div className="text-center mb-6">
               <h1 
-                className="text-6xl font-bold uppercase tracking-wider mb-4 text-cyan-100"
+                className="text-4xl font-bold uppercase tracking-wider mb-2 text-cyan-100"
                 style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}
               >
                 Meet Your Opponent
               </h1>
-              <p className="text-xl text-cyan-300/80 uppercase tracking-wider">
+              <p className="text-lg text-cyan-300/80 uppercase tracking-wider">
                 Prepare for the Legal Battle
               </p>
             </div>
 
-            <div className="flex justify-center items-center gap-12 mb-12">
+            <div className="flex justify-center items-center gap-8 mb-8">
               {/* Player Avatar */}
               <div className="text-center">
-                <div className="w-40 h-40 mx-auto mb-4 relative">
+                <div className="w-32 h-32 mx-auto mb-3 relative">
                   <div className="absolute inset-0 rounded-full tron-border" />
                   <img 
                     src="/images/player-fox-image.png"
@@ -231,28 +231,28 @@ export default function BattleIntroPage() {
                     className="w-full h-full object-cover rounded-full"
                   />
                 </div>
-                <div className="text-cyan-100 font-bold text-xl mb-2 uppercase tracking-wider"
+                <div className="text-cyan-100 font-bold text-lg mb-1 uppercase tracking-wider"
                      style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}>
                   {userData?.name}
                 </div>
-                <div className="text-cyan-300/80 text-lg mb-4 uppercase tracking-wider font-mono">Legal Prodigy</div>
+                <div className="text-cyan-300/80 text-sm mb-3 uppercase tracking-wider font-mono">Legal Prodigy</div>
                 
                 {/* Player Stats */}
-                <Card className="bg-black/80 backdrop-blur-sm p-4 w-48 border-2 border-cyan-500/50 relative" style={{ background: 'rgba(0, 10, 20, 0.8)' }}>
+                <Card className="bg-black/80 backdrop-blur-sm p-3 w-44 border-2 border-cyan-500/50 relative" style={{ background: 'rgba(0, 10, 20, 0.8)' }}>
                   <div className="absolute inset-0 rounded-xl border-2 border-cyan-400/30 animate-[borderPulse_2s_ease-in-out_infinite]" />
-                  <div className="space-y-3 relative z-10">
+                  <div className="space-y-2 relative z-10">
                     <div className="space-y-2">
                       <div className="flex justify-between items-center">
                         <span className="text-cyan-100/90 uppercase tracking-wider font-mono">Logic</span>
                         <div className="flex items-center">
-                          <span className="text-cyan-300 font-bold font-mono">{userData?.stats.logic}</span>
+                          <span className="text-cyan-300 font-bold font-mono">{userData?.stats?.logic || 0}</span>
                           <span className="text-cyan-400/50 ml-1 font-mono">/10</span>
                         </div>
                       </div>
                       <div className="stat-bar">
                         <div 
                           className="stat-bar-fill"
-                          style={{ width: `${(userData?.stats.logic || 0) * 10}%` }}
+                          style={{ width: `${(userData?.stats?.logic || 0) * 10}%` }}
                         />
                       </div>
                     </div>
@@ -261,14 +261,14 @@ export default function BattleIntroPage() {
                       <div className="flex justify-between items-center">
                         <span className="text-cyan-100/90 uppercase tracking-wider font-mono">Charisma</span>
                         <div className="flex items-center">
-                          <span className="text-cyan-300 font-bold font-mono">{userData?.stats.charisma}</span>
+                          <span className="text-cyan-300 font-bold font-mono">{userData?.stats?.charisma || 0}</span>
                           <span className="text-cyan-400/50 ml-1 font-mono">/10</span>
                         </div>
                       </div>
                       <div className="stat-bar">
                         <div 
                           className="stat-bar-fill"
-                          style={{ width: `${(userData?.stats.charisma || 0) * 10}%` }}
+                          style={{ width: `${(userData?.stats?.charisma || 0) * 10}%` }}
                         />
                       </div>
                     </div>
@@ -277,14 +277,14 @@ export default function BattleIntroPage() {
                       <div className="flex justify-between items-center">
                         <span className="text-cyan-100/90 uppercase tracking-wider font-mono">Risk</span>
                         <div className="flex items-center">
-                          <span className="text-cyan-300 font-bold font-mono">{userData?.stats.risk}</span>
+                          <span className="text-cyan-300 font-bold font-mono">{userData?.stats?.risk || 0}</span>
                           <span className="text-cyan-400/50 ml-1 font-mono">/10</span>
                         </div>
                       </div>
                       <div className="stat-bar">
                         <div 
                           className="stat-bar-fill"
-                          style={{ width: `${(userData?.stats.risk || 0) * 10}%` }}
+                          style={{ width: `${(userData?.stats?.risk || 0) * 10}%` }}
                         />
                       </div>
                     </div>
@@ -293,7 +293,7 @@ export default function BattleIntroPage() {
               </div>
 
               {/* VS Text */}
-              <div className="text-6xl font-black text-cyan-400 animate-[vsGlow_2s_ease-in-out_infinite] tracking-widest"
+              <div className="text-4xl font-black text-cyan-400 animate-[vsGlow_2s_ease-in-out_infinite] tracking-widest"
                    style={{ textShadow: '0 0 20px #00ffff, 0 0 30px #00ffff' }}>
                 VS
               </div>
@@ -302,7 +302,7 @@ export default function BattleIntroPage() {
               <div className="text-center">
                 {opponent ? (
                   <>
-                    <div className="w-40 h-40 mx-auto mb-4 relative">
+                    <div className="w-32 h-32 mx-auto mb-3 relative">
                       <div className="absolute inset-0 rounded-full border-2 border-cyan-400/30 animate-[borderPulse_2s_ease-in-out_infinite]" />
                       <img 
                         src={opponent.image}
@@ -311,18 +311,18 @@ export default function BattleIntroPage() {
                         style={{ boxShadow: '0 0 20px rgba(0, 255, 255, 0.3)' }}
                       />
                     </div>
-                    <div className="text-cyan-100 font-bold text-xl mb-2 uppercase tracking-wider"
+                    <div className="text-cyan-100 font-bold text-lg mb-1 uppercase tracking-wider"
                          style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}>
                       {opponent.name}
                     </div>
-                    <div className="text-cyan-300/80 text-lg mb-4 uppercase tracking-wider font-mono">
+                    <div className="text-cyan-300/80 text-sm mb-3 uppercase tracking-wider font-mono">
                       {opponent.pseudonym}
                     </div>
                     
                     {/* Opponent Stats */}
-                    <Card className="bg-black/80 backdrop-blur-sm p-4 w-48 border-2 border-cyan-500/50 relative" style={{ background: 'rgba(0, 10, 20, 0.8)' }}>
+                    <Card className="bg-black/80 backdrop-blur-sm p-3 w-44 border-2 border-cyan-500/50 relative" style={{ background: 'rgba(0, 10, 20, 0.8)' }}>
                       <div className="absolute inset-0 rounded-xl border-2 border-cyan-400/30 animate-[borderPulse_2s_ease-in-out_infinite]" />
-                      <div className="space-y-3 relative z-10">
+                      <div className="space-y-2 relative z-10">
                         <div className="space-y-2">
                           <div className="flex justify-between items-center">
                             <span className="text-cyan-100/90 uppercase tracking-wider font-mono">Logic</span>
@@ -374,7 +374,7 @@ export default function BattleIntroPage() {
                     </Card>
                   </>
                 ) : (
-                  <div className="text-cyan-300/80 text-lg">Loading opponent data...</div>
+                  <div className="text-cyan-300/80 text-sm">Loading opponent data...</div>
                 )}
               </div>
             </div>
@@ -382,10 +382,10 @@ export default function BattleIntroPage() {
             <div className="flex justify-center">
               <button
                 onClick={handleStartBattle}
-                className="relative group overflow-hidden px-16 py-6 bg-cyan-900/20 text-cyan-100 
+                className="relative group overflow-hidden px-12 py-4 bg-cyan-900/20 text-cyan-100 
                   rounded-lg border-2 border-cyan-500/50 
                   hover:bg-cyan-800/30 hover:border-cyan-400 transition-all duration-300 
-                  uppercase tracking-[0.2em] font-bold text-2xl
+                  uppercase tracking-[0.2em] font-bold text-xl
                   shadow-[0_0_20px_rgba(0,255,255,0.3)]
                   hover:shadow-[0_0_30px_rgba(0,255,255,0.5)]"
                 style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}

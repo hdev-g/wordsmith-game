@@ -226,8 +226,8 @@ Outcome: ${adjustedScore >= 60 ? 'Successfully Defended' : 'Takeover Succeeded'}
 Generate a JSON response in this format that MATCHES the final score and outcome:
 {
   "analysis": "2-3 sentences explaining why the defense ${adjustedScore >= 60 ? 'succeeded' : 'failed'} with a score of ${adjustedScore}. If power-up points were significant (${powerUpPoints} > 0), mention how the Wordsmith power-up influenced the outcome.",
-  "keyFactor": "One key factor that influenced the ${adjustedScore >= 60 ? 'successful defense' : 'failed defense'}",
-  "opponentReaction": "A witty, character-specific one-liner from ${opponent.name} that reflects their personality and quote style. If they lost (score >= 60), make it a grudging acknowledgment or threat of future revenge. If they won (score < 60), make it a smug, victorious quip.",
+  "keyFactor": "A comprehensive one-sentence analysis of the most critical factor that determined the ${adjustedScore >= 60 ? 'successful defense' : 'failed defense'}, incorporating specific details about the player's stats, strategy choices, and their effectiveness against ${opponent.name}'s approach",
+  "opponentReaction": "A witty, character-specific one-liner from ${opponent.name}",
   "advice": "One sentence of advice for future defensive cases based on this ${adjustedScore >= 60 ? 'successful' : 'failed'} defense"
 }`;
 

@@ -138,22 +138,22 @@ export default function SelectStrategyPage() {
           <div className="w-full max-w-4xl mx-auto">
             {!showStrategies ? (
               <>
-                <div className="text-center mb-12">
-                  <h1 className="text-5xl font-bold uppercase tracking-wider mb-4 text-cyan-100"
+                <div className="text-center mb-6">
+                  <h1 className="text-4xl font-bold uppercase tracking-wider mb-2 text-cyan-100"
                       style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}>
                     Case Details
                   </h1>
                 </div>
 
-                <Card className="bg-black/80 backdrop-blur-sm p-8 rounded-xl border-2 border-cyan-500/50 relative mb-12 max-w-2xl mx-auto" style={{ background: 'rgba(0, 10, 20, 0.8)' }}>
+                <Card className="bg-black/80 backdrop-blur-sm p-6 rounded-xl border-2 border-cyan-500/50 relative mb-8 max-w-2xl mx-auto" style={{ background: 'rgba(0, 10, 20, 0.8)' }}>
                   <div className="absolute inset-0 rounded-xl border-2 border-cyan-400/30 animate-[borderPulse_2s_ease-in-out_infinite]" />
                   <div className="relative z-10">
-                    <div className="flex flex-col items-center mb-6">
-                      <h2 className="text-4xl font-bold text-cyan-100 text-center uppercase tracking-wider"
+                    <div className="flex flex-col items-center mb-4">
+                      <h2 className="text-3xl font-bold text-cyan-100 text-center uppercase tracking-wider"
                           style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}>
                         {scenario?.title}
                       </h2>
-                      <div className="mt-4 flex items-center gap-3">
+                      <div className="mt-3 flex items-center gap-3">
                         <span className="px-3 py-1 rounded-full text-sm uppercase tracking-wider text-cyan-300 border-2 border-cyan-500/50"
                               style={{ 
                                 background: 'rgba(0, 10, 20, 0.9)',
@@ -171,18 +171,18 @@ export default function SelectStrategyPage() {
                       </div>
                     </div>
 
-                    <div className="space-y-6">
-                      <div className="text-cyan-100/90 text-center text-lg font-mono leading-relaxed">
+                    <div className="space-y-4">
+                      <div className="text-cyan-100/90 text-center text-base font-mono leading-relaxed">
                         {scenario?.description}
                       </div>
 
-                      <div className="flex flex-col gap-6 mt-6">
-                        <div className="bg-cyan-900/20 p-4 rounded-lg border border-cyan-500/30">
-                          <h3 className="text-cyan-300 font-bold mb-2 uppercase tracking-wider">Plaintiff Position</h3>
+                      <div className="flex flex-col gap-4 mt-4">
+                        <div className="bg-cyan-900/20 p-3 rounded-lg border border-cyan-500/30">
+                          <h3 className="text-cyan-300 font-bold mb-1 uppercase tracking-wider">Plaintiff Position</h3>
                           <p className="text-cyan-100/80 text-sm">{scenario?.plaintiffPosition}</p>
                         </div>
-                        <div className="bg-cyan-900/20 p-4 rounded-lg border border-cyan-500/30">
-                          <h3 className="text-cyan-300 font-bold mb-2 uppercase tracking-wider">Defense Position</h3>
+                        <div className="bg-cyan-900/20 p-3 rounded-lg border border-cyan-500/30">
+                          <h3 className="text-cyan-300 font-bold mb-1 uppercase tracking-wider">Defense Position</h3>
                           <p className="text-cyan-100/80 text-sm">{scenario?.defensePosition}</p>
                         </div>
                       </div>
@@ -193,10 +193,10 @@ export default function SelectStrategyPage() {
                 <div className="flex justify-center">
                   <button
                     onClick={() => setShowStrategies(true)}
-                    className="relative group overflow-hidden px-16 py-6 bg-cyan-900/20 text-cyan-100 
+                    className="relative group overflow-hidden px-12 py-4 bg-cyan-900/20 text-cyan-100 
                       rounded-lg border-2 border-cyan-500/50 
                       hover:bg-cyan-800/30 hover:border-cyan-400 transition-all duration-300 
-                      uppercase tracking-[0.2em] font-bold text-2xl
+                      uppercase tracking-[0.2em] font-bold text-xl
                       shadow-[0_0_20px_rgba(0,255,255,0.3)]
                       hover:shadow-[0_0_30px_rgba(0,255,255,0.5)]"
                     style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}

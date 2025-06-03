@@ -60,11 +60,13 @@ export default function CaseResultPage() {
       try {
         const storedCaseData = localStorage.getItem('caseData');
         const storedOutcome = localStorage.getItem('caseOutcome');
+        const userId = localStorage.getItem('userId');
         
-        if (!storedCaseData || !storedOutcome) {
+        if (!storedCaseData || !storedOutcome || !userId) {
           console.error('Missing required data:', {
             hasCaseData: !!storedCaseData,
-            hasOutcome: !!storedOutcome
+            hasOutcome: !!storedOutcome,
+            hasUserId: !!userId
           });
           router.push('/');
           return;
@@ -72,21 +74,38 @@ export default function CaseResultPage() {
 
         const caseData = JSON.parse(storedCaseData);
         const outcome = JSON.parse(storedOutcome);
-        
-        // Save to leaderboard
-        const leaderboardEntry = {
-          playerName: caseData.playerName,
-          score: outcome.score,
-          date: new Date().toISOString()
-        };
-        
-        const storedLeaderboard = localStorage.getItem('leaderboard');
-        const leaderboard = storedLeaderboard ? JSON.parse(storedLeaderboard) : [];
-        leaderboard.push(leaderboardEntry);
-        localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
 
-        console.log('Loaded case data:', caseData);
-        console.log('Loaded outcome:', outcome);
+        // Save to database
+        try {
+          const response = await fetch('/api/save-game-score', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userId,
+              score: outcome.score,
+              scenarioId: caseData.scenarioId,
+              outcome: outcome.outcome,
+              logicScore: caseData.playerStats.logic,
+              charismaScore: caseData.playerStats.charisma,
+              riskScore: caseData.playerStats.risk
+            }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to save score to database');
+          }
+
+          const dbResult = await response.json();
+          console.log('Score saved to database:', dbResult);
+        } catch (error) {
+          console.error('Error saving to database:', error);
+          setError('Failed to save score. Please try again.');
+          setLoading(false);
+          return;
+        }
 
         setCaseData(caseData);
         setOutcome(outcome);
@@ -169,14 +188,14 @@ export default function CaseResultPage() {
       
       <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
         <div className="max-w-4xl w-full">
-          <div className="text-center mb-8">
-            <h1 className="text-5xl font-bold text-cyan-100 mb-4 tracking-widest uppercase"
+          <div className="text-center mb-4">
+            <h1 className="text-4xl font-bold text-cyan-100 mb-2 tracking-widest uppercase"
                 style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}>
               VERDICT
             </h1>
           </div>
           
-          <div className="flex justify-center items-center gap-8 mb-8">
+          <div className="flex justify-center items-center gap-4 mb-4">
             {/* Player Avatar */}
             <div className={`text-center p-4 rounded-xl w-48 relative ${
               outcome.outcome === 'successful defense' 
@@ -184,19 +203,19 @@ export default function CaseResultPage() {
                 : 'bg-black/40 border-2 border-cyan-500/30'
             }`}>
               {outcome.outcome === 'successful defense' && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10
-                  bg-emerald-500 text-white px-4 py-1 rounded-full
-                  border-2 border-emerald-400 uppercase tracking-wider shadow-lg">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10
+                  bg-emerald-500 text-white px-3 py-1 rounded-full text-xs
+                  border border-emerald-400 uppercase tracking-wider shadow-lg">
                   <span className="font-bold inline-block animate-[textPulse_2s_ease-in-out_infinite]">
                     Winner
                   </span>
                 </div>
               )}
-              <div className="w-24 h-24 mx-auto mb-3 relative">
+              <div className="w-24 h-24 mx-auto mb-2 relative">
                 <img 
                   src="/images/player-fox-image.png"
                   alt="Player" 
-                  className={`w-full h-full object-cover rounded-full border-4 ${
+                  className={`w-full h-full object-cover rounded-full border-2 ${
                     outcome.outcome === 'successful defense' 
                       ? 'border-emerald-500' 
                       : 'border-cyan-400/50'
@@ -216,7 +235,7 @@ export default function CaseResultPage() {
             </div>
 
             {/* VS Divider */}
-            <div className="text-4xl font-black text-cyan-100 animate-pulse tracking-widest"
+            <div className="text-3xl font-black text-cyan-100 animate-pulse tracking-widest px-4"
                  style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}>
               VS
             </div>
@@ -228,19 +247,19 @@ export default function CaseResultPage() {
                 : 'bg-black/40 border-2 border-cyan-500/30'
             }`}>
               {outcome.outcome !== 'successful defense' && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10
-                  bg-red-500 text-white px-4 py-1 rounded-full
-                  border-2 border-red-400 uppercase tracking-wider shadow-lg">
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10
+                  bg-red-500 text-white px-3 py-1 rounded-full text-xs
+                  border border-red-400 uppercase tracking-wider shadow-lg">
                   <span className="font-bold inline-block animate-[textPulse_2s_ease-in-out_infinite]">
                     Winner
                   </span>
                 </div>
               )}
-              <div className="w-24 h-24 mx-auto mb-3 relative">
+              <div className="w-24 h-24 mx-auto mb-2 relative">
                 <img 
                   src={caseData.opponent.image} 
                   alt={caseData.opponent.name} 
-                  className={`w-full h-full object-cover rounded-full border-4 ${
+                  className={`w-full h-full object-cover rounded-full border-2 ${
                     outcome.outcome !== 'successful defense' 
                       ? 'border-red-500' 
                       : 'border-cyan-400/50'
@@ -260,9 +279,9 @@ export default function CaseResultPage() {
             </div>
           </div>
 
-          <div className="text-center mb-8">
+          <div className="text-center mb-3">
             <div className={`
-              text-5xl font-black py-4 px-8 rounded-xl inline-block tracking-widest
+              text-3xl font-black py-2 px-5 rounded-lg inline-block tracking-widest
               ${outcome.outcome === 'successful defense' 
                 ? 'bg-emerald-500/10 text-emerald-400 border-2 border-emerald-500 animate-[winnerGlow_2s_ease-in-out_infinite]' 
                 : 'bg-red-500/10 text-red-400 border-2 border-red-500 animate-[loserGlow_2s_ease-in-out_infinite]'}
@@ -271,22 +290,22 @@ export default function CaseResultPage() {
             </div>
           </div>
 
-          <div className="bg-black/40 backdrop-blur-sm p-6 rounded-xl border-2 border-cyan-500/30 mb-8">
-            <h2 className="text-2xl font-bold text-cyan-100 mb-4 uppercase tracking-wider"
+          <div className="bg-black/40 backdrop-blur-sm p-3 rounded-lg border-2 border-cyan-500/30 mb-3">
+            <h2 className="text-lg font-bold text-cyan-100 mb-2 uppercase tracking-wider"
                 style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}>
               Battle Analysis
             </h2>
-            <div className="bg-cyan-500/10 p-4 rounded-lg border border-cyan-500/30">
-              <p className="text-cyan-300 mb-4">{outcome.keyFactor}</p>
-              <div className="flex items-center gap-3 text-cyan-300/80 italic border-t border-cyan-500/30 pt-4">
-                <div className="w-8 h-8 flex-shrink-0">
+            <div className="bg-cyan-500/10 p-2 rounded-lg border border-cyan-500/30">
+              <p className="text-cyan-300 mb-2 text-sm">{outcome.keyFactor}</p>
+              <div className="flex items-center gap-2 text-cyan-300/80 italic border-t border-cyan-500/30 pt-2">
+                <div className="w-6 h-6 flex-shrink-0">
                   <img 
                     src={caseData.opponent.image}
                     alt={caseData.opponent.name} 
                     className="w-full h-full object-cover rounded-full border border-cyan-400/50"
                   />
                 </div>
-                <p>
+                <p className="text-sm">
                   {outcome.opponentReaction}
                 </p>
               </div>
@@ -305,10 +324,10 @@ export default function CaseResultPage() {
                 localStorage.removeItem('finalMoves');
                 router.push('/leaderboard');
               }}
-              className="relative group overflow-hidden px-10 py-3 bg-cyan-500/10 text-cyan-400 
+              className="relative group overflow-hidden px-8 py-2 bg-cyan-500/10 text-cyan-400 
                 rounded-lg border-2 border-cyan-500/50 
                 hover:bg-cyan-500 hover:text-white transition-all duration-300 
-                uppercase tracking-widest font-bold text-lg
+                uppercase tracking-widest font-bold text-base
                 shadow-[0_0_20px_rgba(0,191,255,0.3)]
                 hover:shadow-[0_0_30px_rgba(0,191,255,0.5)]"
             >

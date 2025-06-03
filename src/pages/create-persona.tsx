@@ -112,9 +112,9 @@ export default function CreatePersonaPage() {
   const router = useRouter();
   const [userData, setUserData] = useState<PlayerData | null>(null);
   const [stats, setStats] = useState<PlayerStats>({
-    logic: 8,
-    charisma: 8,
-    risk: 8,
+    logic: 7,
+    charisma: 7,
+    risk: 7,
   });
   const [error, setError] = useState('');
 
@@ -147,7 +147,7 @@ export default function CreatePersonaPage() {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (remainingPoints < 0) {
       setError('Power allocation exceeds system limits');
       return;
@@ -155,50 +155,74 @@ export default function CreatePersonaPage() {
 
     if (!userData) return;
 
-    // Get a random scenario from the scenarios array
-    const randomScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
-
-    // Get a random opponent from the characters array
-    const randomOpponent = characters[Math.floor(Math.random() * characters.length)];
-
-    // Ensure descriptions are arrays for the scenario
-    const scenarioWithArrays = {
-      ...randomScenario,
-      defensiveStrategies: {
-        low: {
-          ...randomScenario.defensiveStrategies.low,
-          description: Array.isArray(randomScenario.defensiveStrategies.low.description) 
-            ? randomScenario.defensiveStrategies.low.description 
-            : [randomScenario.defensiveStrategies.low.description]
+    try {
+      // Update stats in database
+      const response = await fetch('/api/update-user-stats', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        medium: {
-          ...randomScenario.defensiveStrategies.medium,
-          description: Array.isArray(randomScenario.defensiveStrategies.medium.description)
-            ? randomScenario.defensiveStrategies.medium.description
-            : [randomScenario.defensiveStrategies.medium.description]
-        },
-        high: {
-          ...randomScenario.defensiveStrategies.high,
-          description: Array.isArray(randomScenario.defensiveStrategies.high.description)
-            ? randomScenario.defensiveStrategies.high.description
-            : [randomScenario.defensiveStrategies.high.description]
-        }
+        body: JSON.stringify({
+          userId: userData.id,
+          stats
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!data.success) {
+        setError(data.message || 'Failed to update stats');
+        return;
       }
-    };
 
-    // Update user data with stats
-    const updatedUserData: PlayerData = {
-      ...userData,
-      stats
-    };
+      // Get a random scenario from the scenarios array
+      const randomScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
 
-    // Store all the necessary data
-    localStorage.setItem('userData', JSON.stringify(updatedUserData));
-    localStorage.setItem('selectedScenario', JSON.stringify(scenarioWithArrays));
-    localStorage.setItem('selectedOpponent', JSON.stringify(randomOpponent));
+      // Get a random opponent from the characters array
+      const randomOpponent = characters[Math.floor(Math.random() * characters.length)];
 
-    // Navigate directly to battle intro
-    router.push('/battle-intro');
+      // Ensure descriptions are arrays for the scenario
+      const scenarioWithArrays = {
+        ...randomScenario,
+        defensiveStrategies: {
+          low: {
+            ...randomScenario.defensiveStrategies.low,
+            description: Array.isArray(randomScenario.defensiveStrategies.low.description) 
+              ? randomScenario.defensiveStrategies.low.description 
+              : [randomScenario.defensiveStrategies.low.description]
+          },
+          medium: {
+            ...randomScenario.defensiveStrategies.medium,
+            description: Array.isArray(randomScenario.defensiveStrategies.medium.description)
+              ? randomScenario.defensiveStrategies.medium.description
+              : [randomScenario.defensiveStrategies.medium.description]
+          },
+          high: {
+            ...randomScenario.defensiveStrategies.high,
+            description: Array.isArray(randomScenario.defensiveStrategies.high.description)
+              ? randomScenario.defensiveStrategies.high.description
+              : [randomScenario.defensiveStrategies.high.description]
+          }
+        }
+      };
+
+      // Update user data with stats
+      const updatedUserData: PlayerData = {
+        ...userData,
+        stats
+      };
+
+      // Store all the necessary data
+      localStorage.setItem('userData', JSON.stringify(updatedUserData));
+      localStorage.setItem('selectedScenario', JSON.stringify(scenarioWithArrays));
+      localStorage.setItem('selectedOpponent', JSON.stringify(randomOpponent));
+
+      // Navigate directly to battle intro
+      router.push('/battle-intro');
+    } catch (error) {
+      console.error('Error updating stats:', error);
+      setError('Failed to update stats. Please try again.');
+    }
   };
 
   if (!userData) {
@@ -236,20 +260,27 @@ export default function CreatePersonaPage() {
             >
               Create Your Persona
             </h1>
-            <p className="text-lg text-cyan-100">
-              Remaining Budget: 
-              <span className="text-xl ml-2 text-cyan-300 font-bold">
-                {remainingPoints}
-              </span>
-            </p>
           </div>
 
           <div className="max-w-2xl w-full mx-auto">
-            <div className="backdrop-blur-[2px] p-6 rounded-xl border-2 border-cyan-500/50 relative" 
+            {/* Points to allocate display - Above the card */}
+            <div className="mb-4 flex justify-center">
+              <div className="bg-cyan-500/10 px-6 py-2 rounded-full border-2 border-cyan-500/50 backdrop-blur-sm">
+                <div className="text-lg text-cyan-100 font-bold uppercase tracking-wider">
+                  Available Points: 
+                  <span className={`ml-2 text-xl ${remainingPoints > 0 ? 'text-cyan-400' : 'text-red-400'}`}>
+                    {remainingPoints}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="backdrop-blur-[2px] p-4 rounded-xl border-2 border-cyan-500/50 relative" 
               style={{ background: 'rgba(0, 10, 20, 0.8)' }}>
               <div className="absolute inset-0 rounded-xl border-2 border-cyan-400/30 animate-[borderPulse_2s_ease-in-out_infinite]" />
+              
               <div className="relative z-10">
-                {/* Avatar Section */}
+                {/* Avatar and Details Section */}
                 <div className="text-center mb-6">
                   <div className="w-24 h-24 mx-auto mb-3 relative">
                     <div className="absolute inset-0 rounded-full border-2 border-cyan-400/30 animate-[borderPulse_2s_ease-in-out_infinite]" />
@@ -268,7 +299,8 @@ export default function CreatePersonaPage() {
                   </div>
                 </div>
 
-                <div className="h-px bg-cyan-500/30 mb-6" />
+                {/* Divider */}
+                <div className="h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent mb-6" />
 
                 {/* Stats Section */}
                 <div className="space-y-4">
@@ -288,7 +320,7 @@ export default function CreatePersonaPage() {
                         <div className="flex items-center space-x-3">
                           <button
                             onClick={() => handleStatChange(stat, stats[stat] - 1)}
-                            className="px-3 py-1 rounded-lg border-2 border-cyan-500/50 text-cyan-100 transition-all duration-300
+                            className="px-2 py-1 rounded-lg border-2 border-cyan-500/50 text-cyan-100 transition-all duration-300
                               hover:bg-cyan-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={stats[stat] <= MIN_STAT}
                             style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}
@@ -301,7 +333,7 @@ export default function CreatePersonaPage() {
                           </div>
                           <button
                             onClick={() => handleStatChange(stat, stats[stat] + 1)}
-                            className="px-3 py-1 rounded-lg border-2 border-cyan-500/50 text-cyan-100 transition-all duration-300
+                            className="px-2 py-1 rounded-lg border-2 border-cyan-500/50 text-cyan-100 transition-all duration-300
                               hover:bg-cyan-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
                             disabled={stats[stat] >= MAX_STAT || remainingPoints <= 0}
                             style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}
@@ -333,7 +365,7 @@ export default function CreatePersonaPage() {
                     style={{ background: 'rgba(0, 10, 20, 0.9)', textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}
                     disabled={remainingPoints < 0}
                   >
-                    File Character Motion
+                    Submit For Approval
                   </button>
                 </div>
               </div>

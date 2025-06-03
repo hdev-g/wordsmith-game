@@ -82,16 +82,13 @@ export default function WelcomePage() {
   useEffect(() => {
     // Check if we're coming from the leaderboard
     const fromLeaderboard = sessionStorage.getItem('fromLeaderboard');
-    if (!fromLeaderboard) {
-      // If not from leaderboard, redirect to it
-      router.push('/leaderboard');
-    } else {
-      // Clear the flag and continue with normal index page
+    if (fromLeaderboard) {
+      // Clear the flag since we're now on the index page
       sessionStorage.removeItem('fromLeaderboard');
     }
   }, [router]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.name || !formData.email || !formData.companyName || !formData.role) {
@@ -104,8 +101,41 @@ export default function WelcomePage() {
       return;
     }
 
-    localStorage.setItem("userData", JSON.stringify(formData));
-    router.push("/create-persona");
+    try {
+      const response = await fetch('/api/create-user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Store the user ID and data in localStorage for the session
+        localStorage.setItem("userData", JSON.stringify({
+          ...formData,
+          id: data.user.id
+        }));
+        router.push("/create-persona");
+      } else {
+        // Check if the error is due to duplicate email
+        if (data.error?.includes('Unique constraint failed on the fields: (`email`)')) {
+          setError("This email is already registered. Please use a different email address.");
+        } else {
+          setError(data.message || "Failed to create user");
+        }
+      }
+    } catch (error) {
+      console.error('Error creating user:', error);
+      // Check if the error is due to duplicate email
+      if (error instanceof Error && error.message.includes('Unique constraint failed')) {
+        setError("This email is already registered. Please use a different email address.");
+      } else {
+        setError("Failed to create user. Please try again.");
+      }
+    }
   };
 
   return (
@@ -117,12 +147,12 @@ export default function WelcomePage() {
         <div className="absolute inset-0 bg-black/50 tron-grid" />
 
         {/* Content */}
-        <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
-          <div className="w-full max-w-md space-y-10">
+        <div className="relative z-10 min-h-screen flex items-center justify-center p-4">
+          <div className="w-full max-w-md space-y-6">
             {/* Header */}
-            <div className="text-center space-y-3 backdrop-blur-[2px]">
+            <div className="text-center space-y-2 backdrop-blur-[2px]">
               <h1 
-                className="text-6xl font-bold uppercase tracking-wider text-cyan-100"
+                className="text-5xl font-bold uppercase tracking-wider text-cyan-100"
                 style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}
               >
                 Legal Battle
@@ -133,12 +163,12 @@ export default function WelcomePage() {
             </div>
 
             {/* Form Card */}
-            <div className="backdrop-blur-[2px] p-8 rounded-xl border-2 border-cyan-500/50 relative" 
+            <div className="backdrop-blur-[2px] p-6 rounded-xl border-2 border-cyan-500/50 relative" 
                  style={{ background: 'rgba(0, 10, 20, 0.8)' }}>
               <div className="absolute inset-0 rounded-xl border-2 border-cyan-400/30 animate-[borderPulse_2s_ease-in-out_infinite]" />
-              <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+              <form onSubmit={handleSubmit} className="space-y-4 relative z-10">
                 <div>
-                  <label htmlFor="name" className="block text-cyan-100 font-bold uppercase tracking-wider mb-2">
+                  <label htmlFor="name" className="block text-cyan-100 font-bold uppercase tracking-wider mb-1">
                     Legal Alias <span className="text-cyan-400">*</span>
                   </label>
                   <input
@@ -148,14 +178,14 @@ export default function WelcomePage() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     className="w-full bg-black/40 text-cyan-100 placeholder-cyan-300/30 border-2 border-cyan-500/30 
-                      rounded-lg px-4 py-2 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
+                      rounded-lg px-3 py-2 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
                       transition duration-200"
                     placeholder="Enter your legal alias"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="companyName" className="block text-cyan-100 font-bold uppercase tracking-wider mb-2">
+                  <label htmlFor="companyName" className="block text-cyan-100 font-bold uppercase tracking-wider mb-1">
                     Company Name <span className="text-cyan-400">*</span>
                   </label>
                   <input
@@ -165,14 +195,14 @@ export default function WelcomePage() {
                     value={formData.companyName}
                     onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                     className="w-full bg-black/40 text-cyan-100 placeholder-cyan-300/30 border-2 border-cyan-500/30 
-                      rounded-lg px-4 py-2 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
+                      rounded-lg px-3 py-2 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
                       transition duration-200"
                     placeholder="Enter your company name"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="role" className="block text-cyan-100 font-bold uppercase tracking-wider mb-2">
+                  <label htmlFor="role" className="block text-cyan-100 font-bold uppercase tracking-wider mb-1">
                     Job Role <span className="text-cyan-400">*</span>
                   </label>
                   <input
@@ -182,14 +212,14 @@ export default function WelcomePage() {
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                     className="w-full bg-black/40 text-cyan-100 placeholder-cyan-300/30 border-2 border-cyan-500/30 
-                      rounded-lg px-4 py-2 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
+                      rounded-lg px-3 py-2 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
                       transition duration-200"
                     placeholder="Enter your job role"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-cyan-100 font-bold uppercase tracking-wider mb-2">
+                  <label htmlFor="email" className="block text-cyan-100 font-bold uppercase tracking-wider mb-1">
                     Email Address <span className="text-cyan-400">*</span>
                   </label>
                   <input
@@ -199,14 +229,14 @@ export default function WelcomePage() {
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     className="w-full bg-black/40 text-cyan-100 placeholder-cyan-300/30 border-2 border-cyan-500/30 
-                      rounded-lg px-4 py-2 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
+                      rounded-lg px-3 py-2 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400
                       transition duration-200"
                     placeholder="Enter your email address"
                   />
                 </div>
 
                 {error && (
-                  <div className="bg-red-900/20 border-2 border-red-500/50 rounded-lg p-4">
+                  <div className="bg-red-900/20 border-2 border-red-500/50 rounded-lg p-3">
                     <p className="text-red-400 text-sm uppercase tracking-wider">
                       {error}
                     </p>
@@ -215,7 +245,7 @@ export default function WelcomePage() {
 
                 <button
                   type="submit"
-                  className="w-full px-8 py-3 tron-border rounded-lg text-lg uppercase tracking-wider transition-all duration-300
+                  className="w-full px-6 py-2 tron-border rounded-lg text-base uppercase tracking-wider transition-all duration-300
                     hover:scale-[1.02] text-cyan-100"
                   style={{ background: 'rgba(0, 10, 20, 0.9)', textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}
                 >
@@ -226,7 +256,7 @@ export default function WelcomePage() {
 
             {/* Footer */}
             <div className="text-center">
-              <p className="text-cyan-300/60 text-sm uppercase tracking-wider">
+              <p className="text-cyan-300/60 text-xs uppercase tracking-wider">
                 System v2.0.45 // Judicial Protocol Active
               </p>
             </div>

@@ -303,21 +303,21 @@ export default function OpponentCounterPage() {
         <div className="absolute inset-0 courtroom-bg opacity-50" />
         <div className="absolute inset-0 bg-black/50 tron-grid" />
 
-        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-6">
+        <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
           <div className="w-full max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h1 className="text-5xl font-bold uppercase tracking-wider mb-4 text-cyan-100"
+            <div className="text-center mb-6">
+              <h1 className="text-4xl font-bold uppercase tracking-wider mb-2 text-cyan-100"
                   style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}>
                 Counter Attack
               </h1>
 
               {/* Opponent's Counter Move */}
-              <Card className="bg-black/80 backdrop-blur-sm p-8 rounded-xl border-2 border-cyan-500/50 relative mb-12 max-w-2xl mx-auto" 
+              <Card className="bg-black/80 backdrop-blur-sm p-6 rounded-xl border-2 border-cyan-500/50 relative mb-6 max-w-2xl mx-auto" 
                     style={{ background: 'rgba(0, 10, 20, 0.8)' }}>
                 <div className="absolute inset-0 rounded-xl border-2 border-cyan-400/30 animate-[borderPulse_2s_ease-in-out_infinite]" />
                 <div className="relative z-10">
-                  <div className="flex items-center justify-center mb-8">
-                    <div className="w-24 h-24 relative mr-6">
+                  <div className="flex items-center justify-center mb-4">
+                    <div className="w-16 h-16 relative mr-4">
                       <div className="absolute inset-0 rounded-full tron-border" />
                       <img 
                         src={opponent?.image}
@@ -326,16 +326,38 @@ export default function OpponentCounterPage() {
                       />
                     </div>
                     <div>
-                      <div className="text-2xl font-bold text-cyan-100 uppercase tracking-wider"
+                      <div className="text-xl font-bold text-cyan-100 uppercase tracking-wider"
                            style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}>
                         {opponent?.name}
                       </div>
-                      <div className="text-cyan-300/80 text-lg uppercase tracking-wider">Counter Move</div>
+                      <div className="text-cyan-300/80 text-sm uppercase tracking-wider">Counter Move</div>
                     </div>
                   </div>
-                  <p className="text-cyan-100/90 text-lg leading-relaxed font-mono">
-                    {opponentMove?.counter}
-                  </p>
+
+                  {/* Action Description */}
+                  <div className="bg-cyan-900/20 p-3 rounded-lg border border-cyan-500/30 mb-3">
+                    <h3 className="text-cyan-300 font-bold mb-1 uppercase tracking-wider text-sm">Action</h3>
+                    <p className="text-cyan-100/90 text-sm font-mono">
+                      {opponentMove?.counter.split('"')[0].trim()}
+                    </p>
+                  </div>
+
+                  {/* Quote */}
+                  <div className="bg-cyan-900/20 p-3 rounded-lg border border-cyan-500/30">
+                    <h3 className="text-cyan-300 font-bold mb-1 uppercase tracking-wider text-sm">Response</h3>
+                    <div className="flex items-start gap-2">
+                      <div className="flex-shrink-0 w-6 h-6">
+                        <img 
+                          src={opponent?.image}
+                          alt={opponent?.name} 
+                          className="w-full h-full object-cover rounded-full border border-cyan-400/50"
+                        />
+                      </div>
+                      <p className="text-cyan-100/90 text-sm italic font-mono">
+                        "{opponentMove?.counter.split('"')[1]?.trim() || opponentMove?.counter}"
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </Card>
 
@@ -343,10 +365,10 @@ export default function OpponentCounterPage() {
               <div className="flex justify-center">
                 <button
                   onClick={generateFinalMoves}
-                  className="relative group overflow-hidden px-16 py-6 bg-cyan-900/20 text-cyan-100 
+                  className="relative group overflow-hidden px-12 py-4 bg-cyan-900/20 text-cyan-100 
                     rounded-lg border-2 border-cyan-500/50 
                     hover:bg-cyan-800/30 hover:border-cyan-400 transition-all duration-300 
-                    uppercase tracking-[0.2em] font-bold text-2xl
+                    uppercase tracking-[0.2em] font-bold text-xl
                     shadow-[0_0_20px_rgba(0,255,255,0.3)]
                     hover:shadow-[0_0_30px_rgba(0,255,255,0.5)]"
                   style={{ textShadow: '0 0 10px rgba(0, 255, 255, 0.5)' }}
