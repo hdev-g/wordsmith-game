@@ -10,8 +10,10 @@
     "postinstall": "prisma generate",
     "prisma:migrate:dev": "NODE_ENV=development prisma migrate dev",
     "prisma:migrate:prod": "NODE_ENV=production prisma migrate deploy",
-    "prisma:studio": "NODE_ENV=development DATABASE_URL=\"$DEV_DATABASE_URL\" prisma studio",
-    "prisma:studio:prod": "NODE_ENV=production DATABASE_URL=\"$PROD_DATABASE_URL\" prisma studio"
+    "prisma:dev": "DATABASE_URL=$DEV_DATABASE_URL prisma studio",
+    "prisma:prod": "DATABASE_URL=$PROD_DATABASE_URL prisma studio",
+    "studio:dev": "NODE_ENV=development ./scripts/studio.sh",
+    "studio:prod": "NODE_ENV=production ./scripts/studio.sh"
   },
   "dependencies": {
     "@prisma/client": "^5.10.0",

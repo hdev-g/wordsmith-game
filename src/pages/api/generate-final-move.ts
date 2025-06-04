@@ -13,7 +13,8 @@ interface PlayerMove {
 }
 
 interface OpponentMove {
-  counter: string;
+  action: string;
+  quote: string;
 }
 
 interface FinalMove {
@@ -61,7 +62,7 @@ export default async function handler(
 Case Background: ${scenario.description}
 
 Initial Defense: ${playerMove.description}
-Opponent's Counter: ${opponentMove.counter}
+Opponent's Counter: ${opponentMove.action} "${opponentMove.quote}"
 
 Generate two distinct defensive moves:
 1. A high-risk, aggressive strategy

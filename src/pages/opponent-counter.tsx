@@ -11,7 +11,8 @@ interface PlayerMove {
 }
 
 interface OpponentMove {
-  counter: string;
+  action: string;
+  quote: string;
 }
 
 const style = `
@@ -119,9 +120,10 @@ export default function OpponentCounterPage() {
       const result = await response.json();
       console.log('API Response:', result);
       
-      // Ensure we have the correct structure for opponentMove
-      const opponentMove = {
-        counter: result.counter || result // Handle both {counter: string} and string responses
+      // Handle the new JSON response format
+      const opponentMove: OpponentMove = {
+        action: result.action || 'No action provided',
+        quote: result.quote || 'No quote provided'
       };
       
       setOpponentMove(opponentMove);
@@ -338,7 +340,7 @@ export default function OpponentCounterPage() {
                   <div className="bg-cyan-900/20 p-3 rounded-lg border border-cyan-500/30 mb-3">
                     <h3 className="text-cyan-300 font-bold mb-1 uppercase tracking-wider text-sm">Action</h3>
                     <p className="text-cyan-100/90 text-sm font-mono">
-                      {opponentMove?.counter.split('"')[0].trim()}
+                      {opponentMove?.action}
                     </p>
                   </div>
 
@@ -354,7 +356,7 @@ export default function OpponentCounterPage() {
                         />
                       </div>
                       <p className="text-cyan-100/90 text-sm italic font-mono">
-                        "{opponentMove?.counter.split('"')[1]?.trim() || opponentMove?.counter}"
+                        "{opponentMove?.quote}"
                       </p>
                     </div>
                   </div>

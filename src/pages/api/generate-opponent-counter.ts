@@ -22,7 +22,9 @@ export default async function handler(
     }
 
     // Create a system message that generates a character-driven counter
-    const systemMessage = `You are ${opponent.name}, an aggressive corporate lawyer known for your quote: "${opponent.quote}"
+    const systemMessage = `You are ${opponent.name}, an aggressive lawyer representing the PLAINTIFF in this legal case. You are known for your quote: "${opponent.quote}"
+
+CRITICAL: You are the PLAINTIFF's lawyer. You are NEVER on the defense. You are working to advance the PLAINTIFF'S POSITION.
 
 Your stats:
 - Logic: ${opponent.stats.logic}/10 (Higher means more technical/procedural moves)
@@ -33,10 +35,10 @@ Case Context:
 ${scenario.title}
 ${scenario.description}
 
-Plaintiff's Position (Your Position):
+YOUR CLIENT'S POSITION (PLAINTIFF - you work FOR this position):
 ${scenario.plaintiffPosition}
 
-Defendant's Position (Their Position):
+THE DEFENDANT'S POSITION (you are working AGAINST this position):
 ${scenario.defensePosition}
 
 Stakes: ${scenario.stakes}
@@ -45,43 +47,48 @@ Complexity: ${scenario.complexity}
 Key Issues:
 ${scenario.context.keyIssues.map((issue: string) => `- ${issue}`).join('\n')}
 
-The defending lawyer has chosen this defensive strategy:
+The defendant's lawyer has chosen this defensive strategy:
 ${scenario.defensiveStrategies[playerStrategy].name}
 ${scenario.defensiveStrategies[playerStrategy].description}
 
 Risk Level: ${scenario.defensiveStrategies[playerStrategy].risk}
 Potential Reward: ${scenario.defensiveStrategies[playerStrategy].reward}
 
-Your task is to generate a brief, aggressive counter move that:
-1. Reflects your personality and aggressive legal style
-2. Makes a specific offensive legal move to push forward with your case
-3. Directly challenges or circumvents their defensive strategy
+Your task is to generate a brief, aggressive PLAINTIFF move that:
+1. Reflects your personality and aggressive legal style as the PLAINTIFF'S attorney
+2. Makes a specific OFFENSIVE legal move to advance YOUR CLIENT'S POSITION (the plaintiff position)
+3. Directly attacks, challenges, or circumvents the defendant's defensive strategy
 4. Includes a short, witty quip that matches your character
 5. Is no more than 2-3 sentences total
+6. ALWAYS supports the plaintiff's position - never the defendant's position
 
-Format your response as:
-[AGGRESSIVE LEGAL MOVE], followed by a confident, aggressive quip.
+Return a JSON response with separate action and quote:
+{
+  "action": "One sentence describing your aggressive legal move to advance the plaintiff's case",
+  "quote": "Your witty one-liner response"
+}
 
-Example:
-"Files an emergency injunction to block their defensive measures, while simultaneously launching a tender offer directly to shareholders. 'Your defensive walls are made of paper, and I brought a blowtorch.'"`;
+Example for an FTC case where you represent the FTC:
+{
+  "action": "Files additional antitrust violations based on newly uncovered market manipulation data while requesting expedited discovery of internal communications.",
+  "quote": "Your merger math doesn't add up, and neither do your excuses."
+}`;
 
     // Generate counter
     const completion = await openai.chat.completions.create({
       model: "gpt-4-turbo-preview",
       messages: [
         { role: "system", content: systemMessage },
-        { role: "user", content: "Generate a counter move." }
+        { role: "user", content: "Generate an aggressive plaintiff move to advance your client's case." }
       ],
       temperature: 0.7,
       max_tokens: 150,
+      response_format: { type: "json_object" }
     });
 
-    const counter = completion.choices[0].message.content;
-    if (!counter) {
-      throw new Error('Failed to generate counter');
-    }
-
-    return res.status(200).json({ counter });
+    const result = JSON.parse(completion.choices[0].message.content!);
+    
+    return res.status(200).json(result);
   } catch (error) {
     console.error('Error generating counter:', error);
     return res.status(500).json({ error: 'Failed to generate counter' });

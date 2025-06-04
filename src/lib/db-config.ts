@@ -1,17 +1,20 @@
-/**
- * Gets the appropriate database URL based on the environment.
- * In production: Uses Prisma Accelerate URL from PROD_DATABASE_URL
- * In development: Uses local development database URL
- */
-const getDatabaseUrl = () => {
-  const url = process.env.NODE_ENV === 'production'
-    ? process.env.PROD_DATABASE_URL
-    : process.env.DEV_DATABASE_URL;
+import { PrismaClient } from '@prisma/client';
 
-  // Set the DATABASE_URL that Prisma will use
-  process.env.DATABASE_URL = url;
-  
-  return url;
-};
+// Automatically set DATABASE_URL based on environment
+if (!process.env.DATABASE_URL) {
+  if (process.env.NODE_ENV === 'production') {
+    process.env.DATABASE_URL = process.env.PROD_DATABASE_URL;
+  } else {
+    process.env.DATABASE_URL = process.env.DEV_DATABASE_URL;
+  }
+}
 
-export const databaseUrl = getDatabaseUrl(); 
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
+
+export const prisma =
+  globalForPrisma.prisma ||
+  new PrismaClient({
+    log: ['query', 'error', 'warn'],
+  });
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma; 

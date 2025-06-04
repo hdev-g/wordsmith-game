@@ -13,7 +13,8 @@ interface PlayerMove {
 }
 
 interface OpponentMove {
-  counter: string;
+  action: string;
+  quote: string;
 }
 
 interface FinalMove {
@@ -262,7 +263,7 @@ export default function FinalMovePage() {
         selectedStrategy: playerMove?.name.toLowerCase().includes('low') ? 'low' :
                         playerMove?.name.toLowerCase().includes('medium') ? 'medium' : 'high',
         opponent,
-        opponentCounter: opponentMove?.counter,
+        opponentCounter: `${opponentMove?.action} ${opponentMove?.quote}`,
         finalMove: move,
         powerUpPoints,
         userId: userData.id,
