@@ -1,5 +1,5 @@
 import { PrismaClient } from '.prisma/client'
-import { databaseUrl } from './db-config'
+import './db-config' // Ensure DATABASE_URL is set based on NODE_ENV
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
@@ -10,7 +10,7 @@ export const prisma =
   new PrismaClient({
     datasources: {
       db: {
-        url: databaseUrl,
+        url: process.env.DATABASE_URL,
       },
     },
   })
