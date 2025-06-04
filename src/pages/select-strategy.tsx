@@ -224,7 +224,7 @@ export default function SelectStrategyPage() {
                       <button
                         key={strategy.name}
                         onClick={() => handleStrategySelect(strategyType as 'low' | 'medium' | 'high')}
-                        className={`strategy-card text-left p-6 rounded-xl border-2 transition-all duration-300 h-full flex flex-col ${
+                        className={`strategy-card text-center p-6 rounded-xl border-2 transition-all duration-300 h-full flex flex-col ${
                           selectedStrategy === strategyType
                             ? 'border-cyan-400 bg-cyan-900/30'
                             : 'border-cyan-500/50 bg-black/80'
@@ -233,20 +233,21 @@ export default function SelectStrategyPage() {
                         <h3 className="text-xl font-bold mb-2 text-cyan-100">{strategy.name}</h3>
                         <div className="text-cyan-300/80 mb-6 text-sm">
                           <p className="mb-2">Risk Level: {strategy.risk}</p>
-                          <p>Potential Reward: {strategy.reward}</p>
                         </div>
                         
-                        <div className="mt-auto space-y-2">
-                          {strategy.description.map((desc, index) => (
-                            <div key={index} className="flex items-start gap-3 p-3 rounded-lg bg-cyan-900/20 border border-cyan-500/30">
-                              <div className="flex-shrink-0 w-6 h-6 rounded-full border-2 border-cyan-400 flex items-center justify-center">
-                                <span className="text-cyan-400 font-bold">•</span>
-                              </div>
-                              <p className="text-cyan-100/90 text-sm leading-tight pt-0.5">
-                                {desc}
-                              </p>
+                        <div className="flex-grow flex flex-col items-center justify-center mb-6">
+                          <div className="flex items-center justify-center gap-3 p-3 rounded-lg bg-cyan-900/20 border border-cyan-500/30">
+                            <div className="flex-shrink-0 w-6 h-6 rounded-full border-2 border-cyan-400 flex items-center justify-center">
+                              <span className="text-cyan-400 font-bold">•</span>
                             </div>
-                          ))}
+                            <p className="text-cyan-100/90 text-sm leading-tight">
+                              {strategy.description[0]}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="text-cyan-300/80 text-sm mt-auto">
+                          <p>Potential Reward: {strategy.reward}</p>
                         </div>
                       </button>
                     );

@@ -69,7 +69,7 @@ Generate two distinct defensive moves:
 
 For each move, provide:
 - A compelling title (2-4 words)
-- A brief description of the strategy (1-2 sentences)
+- A brief description of the strategy (1 short sentence)
 - 2-3 pros (advantages of this approach)
 - 2-3 cons (potential drawbacks)
 - The risk level (high/low)

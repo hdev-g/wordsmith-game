@@ -77,7 +77,7 @@ export default function CaseResultPage() {
 
         // Save to database
         try {
-          const response = await fetch('/api/save-game-score', {
+          const response = await fetch('/api/scores/save', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

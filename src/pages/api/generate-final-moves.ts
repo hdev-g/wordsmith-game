@@ -50,7 +50,7 @@ Generate two defensive options:
 2. A lower-risk, more conservative defensive move (e.g., white knight, pac-man defense, legal injunction)
 
 For each option, provide:
-- A specific defensive legal action or argument (2-3 sentences)
+- A specific defensive legal action or argument (1 sentence)
 - Success probability (a number between 1-100)
 - Potential impact if successful
 

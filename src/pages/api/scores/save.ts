@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { prisma } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,8 +21,20 @@ export default async function handler(
     } = req.body;
 
     // Validate required fields
-    if (!userId || !scenarioId || score === undefined || !outcome) {
-      return res.status(400).json({ error: 'Missing required fields' });
+    if (!userId || !scenarioId || score === undefined || !outcome || !logicScore || !charismaScore || !riskScore) {
+      return res.status(400).json({ 
+        error: 'Missing required fields',
+        required: ['userId', 'scenarioId', 'score', 'outcome', 'logicScore', 'charismaScore', 'riskScore'],
+        received: {
+          userId,
+          scenarioId,
+          score,
+          outcome,
+          logicScore,
+          charismaScore,
+          riskScore
+        }
+      });
     }
 
     // Validate score range
@@ -50,13 +62,28 @@ export default async function handler(
         user: {
           select: {
             name: true,
-            email: true
+            email: true,
+            companyName: true,
+            role: true
           }
         }
       }
     });
 
-    return res.status(200).json(savedScore);
+    // Update user's stats
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        logicScore,
+        charismaScore,
+        riskScore
+      }
+    });
+
+    return res.status(200).json({
+      message: 'Score saved successfully',
+      score: savedScore
+    });
   } catch (error) {
     console.error('Error saving score:', error);
     return res.status(500).json({ error: 'Failed to save score' });

@@ -2,15 +2,15 @@
 
 import { Scenario } from '@/types/game';
   
-  export const scenarios: Scenario[] = [
-    {
+export const scenarios: Scenario[] = [
+  {
     id: 1,
-    title: "Boardroom Blitz",
-    description: "A high-stakes battle for corporate control as Apex Capital launches an aggressive hostile takeover bid for TitanTech.",
-    plaintiffPosition: "Apex Capital claims TitanTech is undervalued and poorly managed, seeking to acquire control through a tender offer below market value to 'unlock shareholder value' and 'optimize operations'.",
-    defensePosition: "As TitanTech's General Counsel, you must protect the company's independence, preserve its innovative culture, and prevent the stripping of valuable intellectual property.",
-    stakes: "Very High",
-    complexity: "Strategic",
+    title: "The Hostile Takeover",
+    complexity: "High Stakes",
+    stakes: "Critical",
+    description: "Apex Capital, a notorious corporate raider, has launched a surprise hostile takeover bid for your client's company. They're offering a 30% premium over current market value, but your client believes this severely undervalues their growth potential.",
+    plaintiffPosition: "Apex Capital argues the offer is more than generous and that current management is entrenched and resistant to shareholder interests. They've already secured commitments from several institutional investors.",
+    defensePosition: "Your client has a strong growth strategy and believes Apex will strip the company for parts, destroying long-term value. The board needs time to explore strategic alternatives.",
     context: {
       keyIssues: [
         "Corporate control",
@@ -19,7 +19,7 @@ import { Scenario } from '@/types/game';
         "Tender offer defense"
       ],
       stakeholders: [
-        "TitanTech Board",
+        "Board of Directors",
         "Apex Capital",
         "Shareholders",
         "Employees"
@@ -35,33 +35,21 @@ import { Scenario } from '@/types/game';
     defensiveStrategies: {
       low: {
         name: "Rally the Shareholders",
-        description: [
-          "Get major investors on your side",
-          "Block hostile tender offer",
-          "Keep it friendly and professional"
-        ],
+        description: ["Get major investors on your side"],
         riskScore: 4,
         risk: "LOW",
         reward: "Slow but steady defense"
       },
       medium: {
         name: "Poison Pill Defense",
-        description: [
-          "Deploy shareholder rights plan",
-          "Install staggered board terms",
-          "Trigger antitrust review"
-        ],
+        description: ["Deploy shareholder rights plan"],
         riskScore: 6,
         risk: "MEDIUM",
         reward: "Force better deal terms"
       },
       high: {
         name: "White Knight Gambit",
-        description: [
-          "Find friendly buyer with deep pockets",
-          "Launch emergency buyback plan",
-          "Double the company's value overnight"
-        ],
+        description: ["Find friendly buyer with deep pockets"],
         riskScore: 8,
         risk: "HIGH",
         reward: "Total takeover defense"
@@ -73,12 +61,12 @@ import { Scenario } from '@/types/game';
   },
   {
     id: 2,
-    title: "Inside Job",
-    description: "A critical case of trade secret theft and corporate espionage threatening OmniWare's competitive advantage.",
-    plaintiffPosition: "The competitor company claims they legitimately developed similar technology and the former engineer did not violate any agreements.",
-    defensePosition: "As OmniWare's counsel, you must prove trade secret misappropriation, enforce non-compete agreements, and protect your company's intellectual property.",
-    stakes: "High",
+    title: "The Trade Secret Heist",
     complexity: "Technical",
+    stakes: "High",
+    description: "OmniWare, your client, has discovered that their former VP of Engineering took proprietary AI algorithms to their main competitor. Early evidence suggests the competitor is already implementing the stolen technology.",
+    plaintiffPosition: "The competitor claims any similarities in their AI implementation are coincidental and based on common industry practices. They argue the former VP signed no specific IP agreements.",
+    defensePosition: "Your client has clear documentation of their trade secrets and evidence of unusual data downloads before the VP's departure. The technology represents years of R&D investment.",
     context: {
       keyIssues: [
         "Trade secret misappropriation",
@@ -88,7 +76,7 @@ import { Scenario } from '@/types/game';
       ],
       stakeholders: [
         "OmniWare",
-        "Former engineer",
+        "Former VP",
         "Competitor company",
         "Current employees"
       ],
@@ -103,33 +91,21 @@ import { Scenario } from '@/types/game';
     defensiveStrategies: {
       low: {
         name: "Quick Legal Strike",
-        description: [
-          "Get emergency court order",
-          "Lock down all evidence",
-          "Send cease & desist letter"
-        ],
+        description: ["Get emergency court order"],
         riskScore: 3,
         risk: "LOW",
         reward: "Stop the bleeding"
       },
       medium: {
         name: "Digital Detective",
-        description: [
-          "Track stolen code usage",
-          "Force discovery of evidence",
-          "Monitor competitor's moves"
-        ],
+        description: ["Track stolen code usage"],
         riskScore: 6,
         risk: "MEDIUM",
         reward: "Catch them red-handed"
       },
       high: {
         name: "Public Pressure Campaign",
-        description: [
-          "Expose theft to media",
-          "Push for criminal charges",
-          "Make them sweat in public"
-        ],
+        description: ["Expose theft to media"],
         riskScore: 9,
         risk: "HIGH",
         reward: "Total industry knockout"
@@ -141,12 +117,12 @@ import { Scenario } from '@/types/game';
   },
   {
     id: 3,
-    title: "Regulatory Showdown",
-    description: "A high-stakes antitrust investigation threatening to unwind Horizon Pharmaceuticals' merger with HealthCorp.",
-    plaintiffPosition: "The FTC alleges the merger has created monopolistic pricing power over a critical drug, demanding divestiture or significant operational restrictions.",
-    defensePosition: "As Horizon's Corporate Counsel, you must defend the merger's consumer benefits, manage the investigation process, and protect shareholder value.",
+    title: "The Merger Challenge",
+    complexity: "Regulatory",
     stakes: "Critical",
-    complexity: "Complex",
+    description: "The FTC has announced its intention to block your client's $50 billion merger with their largest competitor. They claim the deal would create a monopoly and harm consumer interests.",
+    plaintiffPosition: "The FTC argues the merger would reduce competition, lead to higher prices, and stifle innovation in a critical market sector. They have substantial economic data supporting their position.",
+    defensePosition: "Your client believes the merger will create efficiencies that benefit consumers and is necessary to compete with international rivals. They've already invested heavily in integration planning.",
     context: {
       keyIssues: [
         "Antitrust compliance",
@@ -156,9 +132,9 @@ import { Scenario } from '@/types/game';
       ],
       stakeholders: [
         "FTC regulators",
-        "Horizon shareholders",
-        "Healthcare providers",
-        "Patients"
+        "Company shareholders",
+        "Industry competitors",
+        "Consumers"
       ],
       legalDomain: "Antitrust Law",
       constraints: [
@@ -171,33 +147,21 @@ import { Scenario } from '@/types/game';
     defensiveStrategies: {
       low: {
         name: "Play Nice with FTC",
-        description: [
-          "Cooperate with investigation",
-          "Offer small concessions",
-          "Keep everything friendly"
-        ],
+        description: ["Cooperate with investigation"],
         riskScore: 4,
         risk: "LOW",
         reward: "Dodge major penalties"
       },
       medium: {
         name: "Strategic Sacrifice",
-        description: [
-          "Show merger benefits data",
-          "Offer to sell minor assets",
-          "Keep the core business safe"
-        ],
+        description: ["Show merger benefits data"],
         riskScore: 6,
         risk: "MEDIUM",
         reward: "Save the big money"
       },
       high: {
         name: "All-Out Legal War",
-        description: [
-          "Challenge FTC in court",
-          "Launch PR blitz",
-          "Fight for total victory"
-        ],
+        description: ["Challenge FTC in court"],
         riskScore: 8,
         risk: "HIGH",
         reward: "Keep everything"
@@ -207,4 +171,4 @@ import { Scenario } from '@/types/game';
       prompt: "Detail your approach to defending the merger against FTC scrutiny. Consider regulatory compliance, market analysis, and potential remedies that preserve deal value."
     }
   }
-  ];
+];

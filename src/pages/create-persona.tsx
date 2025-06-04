@@ -157,21 +157,23 @@ export default function CreatePersonaPage() {
 
     try {
       // Update stats in database
-      const response = await fetch('/api/update-user-stats', {
+      const response = await fetch('/api/user/stats', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           userId: userData.id || '',
-          stats
+          logicScore: stats.logic,
+          charismaScore: stats.charisma,
+          riskScore: stats.risk
         }),
       });
 
       const data = await response.json();
       
-      if (!data.success) {
-        setError(data.message || 'Failed to update stats');
+      if (data.error) {
+        setError(data.error || 'Failed to update stats');
         return;
       }
 
