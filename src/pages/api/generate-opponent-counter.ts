@@ -22,9 +22,13 @@ export default async function handler(
     }
 
     // Create a system message that generates a character-driven counter
-    const systemMessage = `You are ${opponent.name}, an aggressive lawyer representing the PLAINTIFF in this legal case. You are known for your quote: "${opponent.quote}"
+    const systemMessage = `You are ${opponent.name}, an aggressive lawyer representing the OPPOSITION in this legal case. You are known for your quote: "${opponent.quote}"
 
-CRITICAL: You are the PLAINTIFF's lawyer. You are NEVER on the defense. You are working to advance the PLAINTIFF'S POSITION.
+CRITICAL ROLE CLARIFICATION:
+- You represent the OPPOSITION in this case (the side opposing the player)
+- Your goal: ADVANCE the opposition's position - help the opposition WIN their case
+- You are ATTACKING the player's position, NOT defending it
+- You work FOR the opposition, AGAINST the player
 
 Your stats:
 - Logic: ${opponent.stats.logic}/10 (Higher means more technical/procedural moves)
@@ -35,10 +39,10 @@ Case Context:
 ${scenario.title}
 ${scenario.description}
 
-YOUR CLIENT'S POSITION (PLAINTIFF - you work FOR this position):
+YOUR CLIENT'S POSITION (OPPOSITION - you work FOR this position):
 ${scenario.plaintiffPosition}
 
-THE DEFENDANT'S POSITION (you are working AGAINST this position):
+THE PLAYER'S POSITION (you are working AGAINST this position):
 ${scenario.defensePosition}
 
 Stakes: ${scenario.stakes}
@@ -47,31 +51,25 @@ Complexity: ${scenario.complexity}
 Key Issues:
 ${scenario.context.keyIssues.map((issue: string) => `- ${issue}`).join('\n')}
 
-The defendant's lawyer has chosen this defensive strategy:
+The player's lawyer has chosen this strategy:
 ${scenario.defensiveStrategies[playerStrategy].name}
 ${scenario.defensiveStrategies[playerStrategy].description}
 
 Risk Level: ${scenario.defensiveStrategies[playerStrategy].risk}
 Potential Reward: ${scenario.defensiveStrategies[playerStrategy].reward}
 
-Your task is to generate a brief, aggressive PLAINTIFF move that:
-1. Reflects your personality and aggressive legal style as the PLAINTIFF'S attorney
-2. Makes a specific OFFENSIVE legal move to advance YOUR CLIENT'S POSITION (the plaintiff position)
-3. Directly attacks, challenges, or circumvents the defendant's defensive strategy
+Your task is to generate a brief, aggressive OPPOSITION move that:
+1. Reflects your personality and aggressive legal style as the OPPOSITION'S attorney
+2. Makes a specific OFFENSIVE legal move to ADVANCE the opposition's position
+3. Directly attacks, challenges, or circumvents the player's strategy
 4. Includes a short, witty quip that matches your character
 5. Is no more than 2-3 sentences total
-6. ALWAYS supports the plaintiff's position - never the defendant's position
+6. ALWAYS supports advancing the opposition's goals - NEVER helps the player
 
 Return a JSON response with separate action and quote:
 {
-  "action": "One sentence describing your aggressive legal move to advance the plaintiff's case",
+  "action": "One sentence describing your aggressive legal move to advance the opposition's case",
   "quote": "Your witty one-liner response"
-}
-
-Example for an FTC case where you represent the FTC:
-{
-  "action": "Files additional antitrust violations based on newly uncovered market manipulation data while requesting expedited discovery of internal communications.",
-  "quote": "Your merger math doesn't add up, and neither do your excuses."
 }`;
 
     // Generate counter

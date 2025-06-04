@@ -178,11 +178,11 @@ export default function SelectStrategyPage() {
 
                       <div className="flex flex-col gap-4 mt-4">
                         <div className="bg-cyan-900/20 p-3 rounded-lg border border-cyan-500/30">
-                          <h3 className="text-cyan-300 font-bold mb-1 uppercase tracking-wider">Plaintiff Position</h3>
+                          <h3 className="text-cyan-300 font-bold mb-1 uppercase tracking-wider">Opposition Position</h3>
                           <p className="text-cyan-100/80 text-sm">{scenario?.plaintiffPosition}</p>
                         </div>
                         <div className="bg-cyan-900/20 p-3 rounded-lg border border-cyan-500/30">
-                          <h3 className="text-cyan-300 font-bold mb-1 uppercase tracking-wider">Defense Position</h3>
+                          <h3 className="text-cyan-300 font-bold mb-1 uppercase tracking-wider">Player's Position</h3>
                           <p className="text-cyan-100/80 text-sm">{scenario?.defensePosition}</p>
                         </div>
                       </div>
